@@ -63,4 +63,4 @@ for i in range(labels_test.shape[1]):
 average_accuracy = np.mean(accuracies)
 
 print(f"Average model accuracy across all labels: {average_accuracy}")
-print(classification_report(y_true, pred))
+print(classification_report(y_true, pred, zero_division=1))
