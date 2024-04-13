@@ -3,8 +3,11 @@ import pandas as pd
 import matplotlib.image as mpimg
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, multilabel_confusion_matrix, ConfusionMatrixDisplay, classification_report, confusion_matrix
 from pathlib import Path
+import matplotlib.pyplot as plt
+import itertools
+
 
 
 script_dir = Path(__file__).parent  
@@ -19,9 +22,7 @@ imageDataTrain = []
 imageDataTest = []
 
 labels_train = df_train.iloc[:, 1:].values  
-
 labels_test = df_test.iloc[:, 1:].values
-
 
 for filename in df_train["filename"]:
     img_path = train_dir / filename
@@ -43,14 +44,23 @@ for filename in df_test["filename"]:
 imageDataTrain = np.array(imageDataTrain)
 imageDataTest = np.array(imageDataTest)
 
-svm_model = OneVsRestClassifier(SVC(kernel='linear', probability=True))
+svm_model = OneVsRestClassifier(SVC(kernel='sigmoid', probability=True))
 svm_model.fit(imageDataTrain, labels_train)
 
 predictions = svm_model.predict(imageDataTest)
-
 accuracies = []
+y_true = []
+pred = []
+
 for i in range(labels_test.shape[1]):  
     accuracies.append(accuracy_score(labels_test[:, i], predictions[:, i]))
+    y_true.append(list(labels_test[:, i]))
+    pred.append(list(predictions[:, i]))
+    # print(labels_test[:, i])
+    # print(predictions[:, i])
+    # print(accuracy_score(labels_test[:, i], predictions[:, i]))
+    
 average_accuracy = np.mean(accuracies)
 
 print(f"Average model accuracy across all labels: {average_accuracy}")
+print(classification_report(y_true, pred))
