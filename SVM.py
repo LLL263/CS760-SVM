@@ -29,7 +29,7 @@ for filename in df_train["filename"]:
     img_path = train_dir / filename
     if img_path.is_file():
         img_array = mpimg.imread(img_path)
-        img_array = np.resize(img_array, (32, 32, 3))
+        img_array = np.resize(img_array, (8, 8, 3))
         img_array = img_array.flatten() / 255.0
         imageDataTrain.append(img_array)
 
@@ -38,7 +38,7 @@ for filename in df_test["filename"]:
     img_path = test_dir / filename
     if img_path.is_file():
         img_array = mpimg.imread(img_path)
-        img_array = np.resize(img_array, (32, 32, 3))
+        img_array = np.resize(img_array, (8, 8, 3))
         img_array = img_array.flatten() / 255.0
         imageDataTest.append(img_array)
 
